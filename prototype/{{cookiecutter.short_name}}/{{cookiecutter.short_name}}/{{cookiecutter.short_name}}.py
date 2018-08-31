@@ -1,6 +1,10 @@
-"""TO-DO: Write a description of what this XBlock is."""
+"""
+TO-DO: Write a description of what this XBlock is.
+"""
 
 import pkg_resources
+from django.template import Context
+from django.template.loader import get_template
 from xblock.core import XBlock
 from xblock.fields import Integer, Scope
 from xblock.fragment import Fragment
@@ -55,7 +59,9 @@ class {{cookiecutter.class_name}}(XBlock):
     # workbench while developing your XBlock.
     @staticmethod
     def workbench_scenarios():
-        """A canned scenario for display in the workbench."""
+        """
+        A canned scenario for display in the workbench.
+        """
         return [
             ("{{cookiecutter.class_name}}",
              """<{{cookiecutter.short_name|lower}}/>
