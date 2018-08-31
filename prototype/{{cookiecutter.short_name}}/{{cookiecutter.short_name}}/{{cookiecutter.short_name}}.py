@@ -73,7 +73,7 @@ class {{cookiecutter.class_name}}(XBlock):
                 'static/css/{{cookiecutter.short_name|lower}}.css',
             ],
             additional_js=[
-                'static/js/src/{{cookiecutter.short_name|lower}}.js',
+                'static/js/{{cookiecutter.short_name|lower}}.js',
             ],
         )
         return frag
