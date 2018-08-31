@@ -29,17 +29,53 @@ class {{cookiecutter.class_name}}(XBlock):
         data = pkg_resources.resource_string(__name__, path)
         return data.decode("utf8")
 
+    def build_fragment(
+            self,
+            template,
+            context_dict,
+            initialize_js_func,
+            additional_css=[],
+            additional_js=[],
+    ):
+        #  pylint: disable=dangerous-default-value, too-many-arguments
+        """
+        Creates a fragment for display.
+        """
+        context = Context(context_dict)
+        fragment = Fragment(template.render(context))
+        for item in additional_css:
+            url = self.runtime.local_resource_url(self, item)
+            fragment.add_css_url(url)
+        for item in additional_js:
+            url = self.runtime.local_resource_url(self, item)
+            fragment.add_javascript_url(url)
+        fragment.initialize_js(initialize_js_func)
+        return fragment
+
     # TO-DO: change this view to display your data your own way.
     def student_view(self, context=None):
         """
         The primary view of the {{cookiecutter.class_name}}, shown to students
         when viewing courses.
         """
-        html = self.resource_string("static/html/{{cookiecutter.short_name|lower}}.html")
-        frag = Fragment(html.format(self=self))
-        frag.add_css(self.resource_string("static/css/{{cookiecutter.short_name|lower}}.css"))
-        frag.add_javascript(self.resource_string("static/js/src/{{cookiecutter.short_name|lower}}.js"))
-        frag.initialize_js('{{cookiecutter.class_name}}')
+        context = context or {}
+        context.update(
+            {
+                'count': count,
+            }
+        )
+        template = get_template('{{cookiecutter.short_name|lower}}.html')
+        fragment = self.build_fragment(
+            template,
+            context
+            initialize_js_fun='{{cookiecutter.class_name}}',
+            additional_css=[
+                'static/css/{{cookiecutter.short_name|lower}}.css',
+            ],
+            additional_js=[
+                'static/js/src/{{cookiecutter.short_name|lower}}.js',
+            ],
+        )
         return frag
 
     # TO-DO: change this handler to perform your own actions.  You may need more
